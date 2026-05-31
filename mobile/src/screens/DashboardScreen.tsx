@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import {
   View,
   StyleSheet,
@@ -25,6 +25,8 @@ export function DashboardScreen({ navigation }: Props) {
   const clearSession = useAuthStore(s => s.clearSession);
   const { pods, isLoading, error, loadPods } = usePodStore();
 
+  console.log("this is pods    ", pods)
+
   useFocusEffect(
     useCallback(() => {
       loadPods();
@@ -40,7 +42,15 @@ export function DashboardScreen({ navigation }: Props) {
         // Continue to map even if activation fails
       }
     }
-    navigation.navigate('LiveMap', { pod: { ...pod, status: pod.status === 'scheduled' && pod.role === 'driver' ? 'active' : pod.status } });
+    navigation.navigate('LiveMap', {
+      pod: {
+        ...pod,
+        status:
+          pod.status === 'scheduled' && pod.role === 'driver'
+            ? 'active'
+            : pod.status,
+      },
+    });
   };
 
   const handleLogout = async () => {
@@ -56,7 +66,11 @@ export function DashboardScreen({ navigation }: Props) {
       </View>
 
       {isLoading && pods.length === 0 ? (
-        <ActivityIndicator size="large" color={colors.primary} style={styles.loader} />
+        <ActivityIndicator
+          size="large"
+          color={colors.primary}
+          style={styles.loader}
+        />
       ) : (
         <FlatList
           data={pods}

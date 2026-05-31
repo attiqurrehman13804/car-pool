@@ -24,6 +24,7 @@ export const usePodStore = create<PodState>(set => ({
     set({ isLoading: true, error: null });
     try {
       const pods = await fetchUpcomingPods();
+      console.log('PODS   ', pods)
       set({ pods, isLoading: false });
     } catch (error) {
       set({

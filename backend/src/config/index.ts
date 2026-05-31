@@ -4,6 +4,7 @@ dotenv.config();
 
 function requireEnv(key: string, fallback?: string): string {
   const value = process.env[key] ?? fallback;
+  console.log("this is valuee     ", value)
   if (!value) {
     throw new Error(`Missing required environment variable: ${key}`);
   }
@@ -16,7 +17,7 @@ export const config = {
   databaseUrl: requireEnv('DATABASE_URL'),
   jwtSecret: requireEnv('JWT_SECRET'),
   jwtPartialSecret: requireEnv('JWT_PARTIAL_SECRET'),
-  allowedEmailDomains: requireEnv('ALLOWED_EMAIL_DOMAINS', 'university.edu')
+  allowedEmailDomains: requireEnv('ALLOWED_EMAIL_DOMAINS', 'gmail.com')
     .split(',')
     .map(d => d.trim().toLowerCase())
     .filter(Boolean),

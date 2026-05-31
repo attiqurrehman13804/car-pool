@@ -26,21 +26,22 @@ export function OnboardingScreen({ navigation }: Props) {
     setError('');
     const trimmed = email.trim().toLowerCase();
 
-    // if (!trimmed.includes('@')) {
-    //   setError('Enter a valid institutional email');
-    //   return;
-    // }
-
-    // if (!validateDomain(trimmed)) {
-    //   setError(`Email must end with: ${env.allowedEmailDomains.map(d => `@${d}`).join(', ')}`);
-    //   return;
-    // }
+    if (!trimmed.includes('@')) {
+      setError('Enter a valid institutional email');
+      return;
+    }
+    if (!validateDomain(trimmed)) {
+      setError(
+        `Email must end with: ${env.allowedEmailDomains
+          .map(d => `@${d}`)
+          .join(', ')}`,
+      );
+      return;
+    }
 
     setLoading(true);
     try {
-      console.log('trimmed', trimmed);
       const result = await requestOtp(trimmed);
-      console.log('result', result);
       navigation.navigate('Otp', { email: trimmed, devOtp: result.devOtp });
     } catch (err) {
       setError(getErrorMessage(err));
@@ -54,7 +55,8 @@ export function OnboardingScreen({ navigation }: Props) {
       <View style={styles.content}>
         <AppText variant="title">Commute Pods</AppText>
         <AppText variant="caption" style={styles.subtitle}>
-          Institutional car pooling with 2-layer security. Verify your campus email to get started.
+          Institutional car pooling with 2-layer security. Verify your campus
+          email to get started.
         </AppText>
 
         <AppInput
@@ -68,7 +70,11 @@ export function OnboardingScreen({ navigation }: Props) {
           error={error}
         />
 
-        <AppButton title="Send Verification Code" onPress={handleContinue} loading={loading} />
+        <AppButton
+          title="Send Verification Code"
+          onPress={handleContinue}
+          loading={loading}
+        />
 
         <AppButton
           title="Already have an account? Log in"

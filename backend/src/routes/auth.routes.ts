@@ -48,7 +48,9 @@ function handleAuthError(res: Response, error: unknown): void {
 router.post('/request-otp', async (req, res) => {
   try {
     const { email } = emailSchema.parse(req.body);
+    console.log("this is email    ", email)
     const result = await requestOtp(email);
+    console.log("this is result    ", result)
     res.json(result);
   } catch (error) {
     if (error instanceof z.ZodError) {

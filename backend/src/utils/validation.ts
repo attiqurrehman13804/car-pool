@@ -2,6 +2,7 @@ import { config } from '../config';
 
 export function isAllowedEmailDomain(email: string): boolean {
   const domain = email.split('@')[1]?.toLowerCase();
+  console.log(domain, "  domain  ")
   if (!domain) {
     return false;
   }
