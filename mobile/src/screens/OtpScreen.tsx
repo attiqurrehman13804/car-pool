@@ -6,7 +6,7 @@ import { AppText } from '../components/ui/AppText';
 import { AppInput } from '../components/ui/AppInput';
 import { AppButton } from '../components/ui/AppButton';
 import { RootStackParamList } from '../types';
-import { verifyOtp, getErrorMessage } from '../services/api';
+import { verifyOtp, requestOtp, getErrorMessage } from '../services/api';
 import { spacing } from '../theme';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Otp'>;
@@ -16,6 +16,21 @@ export function OtpScreen({ route, navigation }: Props) {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const [resendCooldown, setResendCooldown] = useState(0);
+
+  const handleResend = async () => {
+    if (resendCooldown > 0) return;
+    try {
+      const result = await requestOtp(email);
+      setResendCooldown(60);
+      if (result.devOtp) {
+        setError('');
+      }
+    } catch (err) {
+      setError(getErrorMessage(err));
+    }
+  };
 
   const handleVerify = async () => {
     setError('');
@@ -63,6 +78,12 @@ export function OtpScreen({ route, navigation }: Props) {
         />
 
         <AppButton title="Verify Code" onPress={handleVerify} loading={loading} />
+        <AppButton
+          title={resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend Code'}
+          variant="outline"
+          onPress={handleResend}
+          disabled={resendCooldown > 0}
+        />
         <AppButton title="Back" variant="outline" onPress={() => navigation.goBack()} />
       </View>
     </ScreenContainer>

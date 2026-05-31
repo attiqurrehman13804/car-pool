@@ -1,13 +1,7 @@
 import React from 'react';
-import {
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  useWindowDimensions,
-  ViewStyle,
-} from 'react-native';
-import { colors, radius, spacing } from '../../theme';
+import { TouchableOpacity, Text, StyleSheet, ActivityIndicator, useWindowDimensions, ViewStyle } from 'react-native';
+import { useTheme } from '../../theme/ThemeContext';
+import { radius, spacing } from '../../theme';
 
 interface AppButtonProps {
   title: string;
@@ -18,16 +12,9 @@ interface AppButtonProps {
   style?: ViewStyle;
 }
 
-export function AppButton({
-  title,
-  onPress,
-  variant = 'primary',
-  loading = false,
-  disabled = false,
-  style,
-}: AppButtonProps) {
+export function AppButton({ title, onPress, variant = 'primary', loading = false, disabled = false, style }: AppButtonProps) {
+  const { colors } = useTheme();
   const { width } = useWindowDimensions();
-
   const variantStyles = {
     primary: { bg: colors.primary, text: '#FFF', border: colors.primary },
     secondary: { bg: colors.secondary, text: '#FFF', border: colors.secondary },
@@ -37,22 +24,11 @@ export function AppButton({
 
   return (
     <TouchableOpacity
-      style={[
-        styles.button,
-        {
-          backgroundColor: variantStyles.bg,
-          borderColor: variantStyles.border,
-          maxWidth: Math.min(width * 0.95, 420),
-        },
-        (disabled || loading) && styles.disabled,
-        style,
-      ]}
+      style={[styles.button, { backgroundColor: variantStyles.bg, borderColor: variantStyles.border, maxWidth: Math.min(width * 0.95, 420) }, (disabled || loading) && styles.disabled, style]}
       onPress={onPress}
       disabled={disabled || loading}
       activeOpacity={0.8}>
-      {loading ? (
-        <ActivityIndicator color={variantStyles.text} />
-      ) : (
+      {loading ? <ActivityIndicator color={variantStyles.text} /> : (
         <Text style={[styles.text, { color: variantStyles.text }]}>{title}</Text>
       )}
     </TouchableOpacity>
@@ -60,21 +36,7 @@ export function AppButton({
 }
 
 const styles = StyleSheet.create({
-  button: {
-    width: '100%',
-    alignSelf: 'center',
-    paddingVertical: 14,
-    borderRadius: radius.md,
-    borderWidth: 1.5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: spacing.sm,
-  },
-  text: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  disabled: {
-    opacity: 0.6,
-  },
+  button: { width: '100%', alignSelf: 'center', paddingVertical: 14, borderRadius: radius.md, borderWidth: 1.5, alignItems: 'center', justifyContent: 'center', marginBottom: spacing.sm },
+  text: { fontSize: 16, fontWeight: '600' },
+  disabled: { opacity: 0.6 },
 });

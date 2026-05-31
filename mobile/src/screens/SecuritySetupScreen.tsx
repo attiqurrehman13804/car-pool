@@ -27,8 +27,20 @@ export function SecuritySetupScreen({ route, navigation }: Props) {
       setError('Password must be at least 8 characters');
       return;
     }
-    if (!/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) {
-      setError('Password must be alphanumeric');
+    if (!/[A-Z]/.test(password)) {
+      setError('Password must contain an uppercase letter');
+      return;
+    }
+    if (!/[a-z]/.test(password)) {
+      setError('Password must contain a lowercase letter');
+      return;
+    }
+    if (!/[0-9]/.test(password)) {
+      setError('Password must contain a number');
+      return;
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      setError('Password must contain a special character');
       return;
     }
     if (password !== confirmPassword) {

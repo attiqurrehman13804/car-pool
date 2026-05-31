@@ -29,8 +29,11 @@ export function PinLoginScreen({ route, navigation }: Props) {
     setLoading(true);
     try {
       const result = await verifyPin(partialToken, pin);
-      await setSession(result.accessToken, result.user);
-      navigation.reset({ index: 0, routes: [{ name: 'Dashboard' }] });
+      await setSession(result.accessToken, {
+        id: result.user.id,
+        email: result.user.email,
+        is_admin: result.user.isAdmin,
+      });
     } catch (err) {
       setError(getErrorMessage(err));
     } finally {

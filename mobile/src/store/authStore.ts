@@ -47,11 +47,21 @@ export const useAuthStore = create<AuthState>((set) => ({
         let user: User | null = null;
         if (userJson) {
           user = JSON.parse(userJson) as User;
-        } else {
-          try {
-            user = await fetchMe();
-            await AsyncStorage.setItem(USER_KEY, JSON.stringify(user));
-          } catch {
+        }
+        try {
+          const me = await fetchMe();
+          user = {
+            id: me.id,
+            email: me.email,
+            full_name: me.full_name,
+            phone: me.phone,
+            profile_photo_url: me.profile_photo_url,
+            is_admin: me.is_admin,
+            default_role: me.default_role,
+          };
+          await AsyncStorage.setItem(USER_KEY, JSON.stringify(user));
+        } catch {
+          if (!user) {
             await AsyncStorage.removeItem(TOKEN_KEY);
             setAuthToken(null);
             disconnectSocket();

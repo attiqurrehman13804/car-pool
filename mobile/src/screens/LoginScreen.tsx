@@ -65,11 +65,8 @@ export function LoginScreen({ navigation }: Props) {
         />
 
         <AppButton title="Continue to PIN" onPress={handleLogin} loading={loading} />
-        <AppButton
-          title="Create account"
-          variant="outline"
-          onPress={() => navigation.navigate('Onboarding')}
-        />
+        <AppButton title="Forgot Password?" variant="outline" onPress={() => navigation.navigate('ForgotPassword')} />
+        <AppButton title="Create account" variant="outline" onPress={() => navigation.navigate('Onboarding')} />
       </View>
     </ScreenContainer>
   );
